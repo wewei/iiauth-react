@@ -4,7 +4,7 @@ import { ComponentType, useEffect, useState } from "react";
 
 export type AnonymousViewProps = {
   error?: string;
-  authenticate: () => void;
+  login: () => void;
 };
 
 export type AuthenticatedViewProps = {
@@ -30,7 +30,7 @@ export type AuthenticateProps = {
 
 type AuthState =
   | { type: "Preparing" }
-  | { type: "Anonymous"; error?: string; authenticate: () => void }
+  | { type: "Anonymous"; error?: string; login: () => void }
   | { type: "Authenticating" }
   | {
       type: "Authenticated";
@@ -60,7 +60,7 @@ const initializeStateMachine = async (
     setState({
       type: "Anonymous",
       error,
-      authenticate: doAuthenticate(client),
+      login: doAuthenticate(client),
     });
 
   const doAuthenticate = (client: AuthClient) => () => {
@@ -76,7 +76,7 @@ const initializeStateMachine = async (
   const setAnonymous = (client: AuthClient) => {
     setState({
       type: "Anonymous",
-      authenticate: doAuthenticate(client),
+      login: doAuthenticate(client),
     });
   };
 
@@ -113,8 +113,8 @@ export default function IIAuth({
 
   switch (state.type) {
     case "Anonymous": {
-      const { error, authenticate } = state;
-      return <AnonymousView error={error} authenticate={authenticate} />;
+      const { error, login } = state;
+      return <AnonymousView error={error} login={login} />;
     }
     case "Authenticated": {
       const { identity, logout } = state;
